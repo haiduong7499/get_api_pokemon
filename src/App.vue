@@ -1,39 +1,80 @@
+<template>
+  <main>
+    <ListPokemon
+      :listItems="pokemonList"
+      :currentPage="meta.current_page"
+      :totalPages="meta.last_page"
+      :type="meta.type"
+      :showModal="showModal"
+      :selectedPokemon="pokemonDetail"
+      @prevPage="prevPage"
+      @nextPage="nextPage"
+      @sortBy="sortBy"
+      @showDetails="showDetails"
+      @closeModal="closeModal"
+      v-if="pokemonList.length"
+    />
+    <p v-else>Loading...</p>
+  </main>
+</template>
 <script setup>
 import { ref, onMounted } from 'vue';
-import HelloWorld from './components/HelloWorld.vue'
 import ListPokemon from './components/ListPokemon.vue'
 const pokemonList = ref([]);
-
-const fetchPokemon = async () => {
+const imagePokemon = ref('');
+let pokemonDetail = ref({});
+let showModal = ref(false);
+const meta = ref({
+  current_page: 1,
+  type: 'number',
+});
+const getPokemon = async () => {
   try {
-    const response = await fetch('https://api.vandvietnam.com/api/pokemon-api/pokemons?page[number]=1&page[size]=10&sort=number');
+    const response = await fetch(`https://api.vandvietnam.com/api/pokemon-api/pokemons?page[number]=${meta.value.current_page}&page[size]=10&sort=${meta.value.type}`);
     const data = await response.json();
-    pokemonList.value = data.data; // Adjust this according to the actual structure of the API response
+    pokemonList.value = data.data;
+    meta.value = data.meta;
   } catch (error) {
     console.error('Error fetching Pokémon data:', error);
   }
 };
 
+const getPokemonDetail = async (id) => {
+  try {
+    const response = await fetch(`https://api.vandvietnam.com/api/pokemon-api/pokemons/${id}/sprite`);
+    const data = await response;
+    imagePokemon.value = data.url;
+  } catch (error) {
+    console.error('Error fetching Pokémon data:', error);
+  }
+};
+
+async function prevPage(page) {
+  meta.value.current_page = meta.value.current_page - 1
+  await getPokemon();
+}
+async function nextPage(page) {
+  meta.value.current_page = meta.value.current_page + 1
+  await getPokemon();
+}
+async function sortBy(type) {
+  meta.value.type = type;
+  await getPokemon();
+}
+
+async function showDetails(pokemon) {
+  await getPokemonDetail(pokemon.id)
+  pokemonDetail.value = { image:imagePokemon.value, ...pokemon}
+  console.log(pokemonDetail.value)
+  showModal.value = true;
+}
+function closeModal() {
+  showModal.value = !showModal.value;
+}
 onMounted(() => {
-  fetchPokemon();
+  getPokemon(meta.value);
 });
 </script>
-
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <ListPokemon :listItems="pokemonList" v-if="pokemonList.length" />
-    <p v-else>Loading...</p>
-  </main>
-</template>
-
 <style scoped>
 header {
   line-height: 1.5;
@@ -62,3 +103,4 @@ header {
   }
 }
 </style>
+
