@@ -8,10 +8,12 @@
       :showModal="showModal"
       :selectedPokemon="pokemonDetail"
       :headers="headers"
+      :typeList="typeList"
       @prevPage="prevPage"
       @nextPage="nextPage"
       @sortBy="sortBy"
-      @showDetails="showDetails"
+      @handleSelectChange="handleSelectChange"
+      @showDetail="showDetail"
       @closeModal="closeModal"
       v-if="pokemonList.length"
     />
@@ -24,9 +26,11 @@ import { ref, onMounted } from 'vue';
 import ListPokemon from './components/ListPokemon.vue';
 
 const pokemonList = ref([]);
+const typeList = ref([]);
 const imagePokemon = ref('');
 const pokemonDetail = ref({});
 const showModal = ref(false);
+const typePokemon = ref();
 const meta = ref({
   current_page: 1,
   last_page: 1,
@@ -87,7 +91,9 @@ const headers = ref([
 const getPokemon = async () => {
   try {
     const response = await fetch(
-      `https://api.vandvietnam.com/api/pokemon-api/pokemons?page[number]=${meta.value.current_page}&page[size]=10&sort=${meta.value.type}`
+      `https://api.vandvietnam.com/api/pokemon-api/pokemons?page[number]=${meta.value.current_page}
+        &page[size]=10
+        &sort=${meta.value.type}${typePokemon.value ? typePokemon.value : ''}`
     );
     const data = await response.json();
     pokemonList.value = data.data;
@@ -109,7 +115,17 @@ const getPokemonDetail = async (id) => {
     console.error('Error fetching Pokémon data:', error);
   }
 };
-
+const getTypes = async (id) => {
+  try {
+    const response = await fetch(
+      `https://api.vandvietnam.com/api/pokemon-api/types`
+    );
+    const data = await response.json();
+    typeList.value = data.data;
+  } catch (error) {
+    console.error('Error fetching Pokémon data:', error);
+  }
+};
 const prevPage = async () => {
   if (meta.value.current_page > 1) {
     meta.value.current_page -= 1;
@@ -132,8 +148,12 @@ const sortBy = async (type) => {
   }
   await getPokemon();
 };
-
-const showDetails = async (pokemon) => {
+const handleSelectChange = async (type) => {
+  typePokemon.value = `&filter[type]=${type}`
+  console.log(typePokemon.value)
+  await getPokemon();
+}
+const showDetail = async (pokemon) => {
   await getPokemonDetail(pokemon.id);
   pokemonDetail.value = { image: imagePokemon.value, ...pokemon };
   showModal.value = true;
@@ -145,6 +165,7 @@ const closeModal = () => {
 
 onMounted(() => {
   getPokemon();
+  getTypes();
 });
 </script>
 
@@ -176,3 +197,4 @@ header {
   }
 }
 </style>
+

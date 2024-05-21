@@ -1,5 +1,8 @@
 <template>
   <div>
+    <select id="typeSelect" v-model="selectedType" class="custom-select" @change="handleSelectChange">
+      <option v-for="type in typeList" :key="type.id" :value="type.id">{{ type.name }}</option>
+    </select>
     <table>
       <thead>
         <tr>
@@ -20,7 +23,7 @@
           <td>{{ pokemon.sp_def }}</td>
           <td>{{ pokemon.speed }}</td>
           <td>
-            <button @click="showDetails(pokemon)">Details</button>
+            <button @click="showDetail(pokemon)">Detail</button>
           </td>
         </tr>
       </tbody>
@@ -73,10 +76,14 @@ const props = defineProps({
   },
   headers: {
     type: Array,
+  },
+  typeList: {
+    type: Array,
   }
 });
 const sortStatus = ref('asc')
-const emits = defineEmits(['prevPage', 'nextPage', 'sortBy', 'showDetails', 'closeModal']);
+const selectedType = ref(0)
+const emits = defineEmits(['prevPage', 'nextPage', 'sortBy', 'showDetail', 'closeModal', 'handleSelectChange']);
 const formatDate = (date) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(date).toLocaleDateString(undefined, options);
@@ -96,12 +103,16 @@ const getSortClass = (type) => {
   }
   return '';
 };
-const showDetails = (pokemon) => {
-  emits('showDetails', pokemon);
+const showDetail = (pokemon) => {
+  emits('showDetail', pokemon);
 };
 const closeModal = () => {
   emits('closeModal');
 };
+const handleSelectChange = (event) => {
+  console.log(event.target.value)
+  emits('handleSelectChange', event.target.value);
+}
 </script>
 
 <style>
@@ -132,5 +143,18 @@ tr:hover {
 }
 .asc {
   transform: rotate(180deg);
+}
+.custom-select {
+  width: 200px;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+
+.custom-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.1rem rgba(0,123,255,.25);
 }
 </style>
