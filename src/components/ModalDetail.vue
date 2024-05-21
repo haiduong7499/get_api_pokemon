@@ -9,10 +9,7 @@
       <div class="modal-right">
         <p>Name: {{ selectedPokemon.name }}</p>
         <p>Type:
-          {{ selectedPokemon.type_1
-
-
-          }}{{ selectedPokemon.type_2 ? ' / ' + selectedPokemon.type_2 : '' }}
+          {{ selectedPokemon.type_name }}
         </p>
         <p>Total: {{ selectedPokemon.total }}</p>
         <p>HP: {{ selectedPokemon.hp }}</p>
