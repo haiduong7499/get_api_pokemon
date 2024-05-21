@@ -149,8 +149,11 @@ const sortBy = async (type) => {
   await getPokemon();
 };
 const handleSelectChange = async (type) => {
-  typePokemon.value = `&filter[type]=${type}`
-  console.log(typePokemon.value)
+  if(type !== "") {
+    typePokemon.value = `&filter[type]=${type}`
+  } else {
+    typePokemon.value = type
+  }
   await getPokemon();
 }
 const showDetail = async (pokemon) => {

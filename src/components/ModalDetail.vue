@@ -104,6 +104,8 @@ const closeModal = () => {
 .image-container {
   border: 2px solid #ccc;
   padding: 5px;
+  width: 300px;
+  height: 300px;
 }
 
 .image-container img {

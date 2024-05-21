@@ -1,6 +1,7 @@
 <template>
   <div>
     <select id="typeSelect" v-model="selectedType" class="custom-select" @change="handleSelectChange">
+      <option value="">Default</option>
       <option v-for="type in typeList" :key="type.id" :value="type.id">{{ type.name }}</option>
     </select>
     <table>
@@ -44,7 +45,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed, defineEmits, ref } from 'vue';
+import { defineProps, defineEmits, ref } from 'vue';
 import ModalDetail from './ModalDetail.vue';
 
 const props = defineProps({
@@ -82,7 +83,7 @@ const props = defineProps({
   }
 });
 const sortStatus = ref('asc')
-const selectedType = ref(0)
+const selectedType = ref("")
 const emits = defineEmits(['prevPage', 'nextPage', 'sortBy', 'showDetail', 'closeModal', 'handleSelectChange']);
 const formatDate = (date) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
