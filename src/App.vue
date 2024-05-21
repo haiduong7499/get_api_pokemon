@@ -17,7 +17,9 @@
       @closeModal="closeModal"
       v-if="pokemonList.length"
     />
-    <p v-else>Loading...</p>
+    <div v-else>
+      <div class="loader"></div>
+    </div>
   </main>
 </template>
 
@@ -181,7 +183,21 @@ header {
   display: block;
   margin: 0 auto 2rem;
 }
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 2s linear infinite;
+  margin: auto;
+  margin-top: 50px;
+}
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 @media (min-width: 1024px) {
   header {
     display: flex;
@@ -200,4 +216,3 @@ header {
   }
 }
 </style>
-

@@ -122,7 +122,6 @@ const closeModal = () => {
   emits('closeModal');
 };
 const handleSelectChange = (event) => {
-  console.log(event.target.value)
   emits('handleSelectChange', event.target.value);
 }
 </script>
