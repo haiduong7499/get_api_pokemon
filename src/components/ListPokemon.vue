@@ -3,20 +3,7 @@
     <table>
       <thead>
         <tr>
-          <th @click="sortBy('number')">Number</th>
-          <th>Name</th>
-          <th>Type</th>
-          <th @click="sortBy('total')">Total Stats</th>
-          <th @click="sortBy('hp')">HP</th>
-          <th @click="sortBy('attack')">Attack</th>
-          <th @click="sortBy('defense')">Defense</th>
-          <th @click="sortBy('sp_atk')">Special Attack</th>
-          <th @click="sortBy('sp_def')">Special Defense</th>
-          <th @click="sortBy('speed')">Speed</th>
-          <th>Generation</th>
-          <th>Legendary</th>
-          <th>Created At</th>
-          <th>Updated At</th>
+          <th v-for="head in headers" :key="head.id">{{ head.name }}<img v-if="head.sortable" src="../assets/arrow-down.svg" @click="sortBy(`${head.type}`)" :class="getSortClass(`${head.type}`)"></th>
           <th></th>
         </tr>
       </thead>
@@ -24,11 +11,6 @@
         <tr v-for="pokemon in listItems" :key="pokemon.id">
           <td>{{ pokemon.number }}</td>
           <td>{{ pokemon.name }}</td>
-          <td>
-            {{ pokemon.type_1
-
-            }}{{ pokemon.type_2 ? ' / ' + pokemon.type_2 : '' }}
-          </td>
           <td>{{ pokemon.total }}</td>
           <td>{{ pokemon.hp }}</td>
           <td>{{ pokemon.attack }}</td>
@@ -36,10 +18,6 @@
           <td>{{ pokemon.sp_atk }}</td>
           <td>{{ pokemon.sp_def }}</td>
           <td>{{ pokemon.speed }}</td>
-          <td>{{ pokemon.generation }}</td>
-          <td>{{ pokemon.legendary ? 'Legendary' : 'Non-Legendary' }}</td>
-          <td>{{ formatDate(pokemon.created_at) }}</td>
-          <td>{{ formatDate(pokemon.updated_at) }}</td>
           <td>
             <button @click="showDetails(pokemon)">Details</button>
           </td>
@@ -62,7 +40,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed, defineEmits } from 'vue';
+import { defineProps, computed, defineEmits, ref } from 'vue';
 import ModalDetail from './ModalDetail.vue';
 
 const props = defineProps({
@@ -89,7 +67,14 @@ const props = defineProps({
   selectedPokemon: {
     type: Object,
   },
+  type: {
+    type: String,
+  },
+  headers: {
+    type: Array,
+  }
 });
+const sortStatus = ref('asc')
 const emits = defineEmits(['prevPage', 'nextPage', 'sortBy', 'showDetails', 'closeModal']);
 const formatDate = (date) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -104,6 +89,12 @@ function prevPage() {
 function sortBy(type) {
   emits('sortBy', type);
 }
+const getSortClass = (type) => {
+  if (props.type === type) {
+    return 'asc';
+  }
+  return '';
+};
 const showDetails = (pokemon) => {
   emits('showDetails', pokemon);
 };
@@ -128,10 +119,17 @@ th {
   background-color: #f4f4f4;
   cursor: pointer;
 }
+th img {
+  margin-left: 5px;
+  transition: 0.5s;
+}
 tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 tr:hover {
   background-color: #f1f1f1;
+}
+.asc {
+  transform: rotate(180deg);
 }
 </style>
