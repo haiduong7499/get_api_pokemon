@@ -34,54 +34,51 @@ const meta = ref({
 });
 const headers = ref([
   {
-    id: 1,
     name: 'Number',
     type: 'number',
     sortable: true,
   },
   {
-    id: 2,
     name: 'Name',
     type: 'name',
     sortable: false,
   },
   {
-    id: 3,
+    name: 'Type',
+    type: 'type',
+    sortable: false,
+  },
+  {
     name: 'Total Stats',
     type: 'total',
     sortable: true,
   },
   {
-    id: 4,
     name: 'HP',
     type: 'hp',
     sortable: true,
   },
   {
-    id: 5,
     name: 'Attack',
     type: 'attack',
     sortable: true,
   },
   {
-    id: 6,
     name: 'Defense',
     type: 'defense',
     sortable: true,
-  },{
-    id: 7,
+  },
+  {
     name: 'Special Attack',
     type: 'sp_atk',
     sortable: true,
   },
   {
-    id: 8,
     name: 'Special Defense',
     type: 'sp_def',
     sortable: true,
   },
   {
-    id: 9,
     name: 'Speed',
     type: 'speed',
     sortable: true,

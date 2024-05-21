@@ -3,7 +3,7 @@
     <table>
       <thead>
         <tr>
-          <th v-for="head in headers" :key="head.id">{{ head.name }}<img v-if="head.sortable" src="../assets/arrow-down.svg" @click="sortBy(`${head.type}`)" :class="getSortClass(`${head.type}`)"></th>
+          <th v-for="(head, index) in headers" :key="index">{{ head.name }}<img v-if="head.sortable" src="../assets/arrow-down.svg" @click="sortBy(`${head.type}`)" :class="getSortClass(`${head.type}`)"></th>
           <th></th>
         </tr>
       </thead>
@@ -11,6 +11,7 @@
         <tr v-for="pokemon in listItems" :key="pokemon.id">
           <td>{{ pokemon.number }}</td>
           <td>{{ pokemon.name }}</td>
+          <td>{{ pokemon.type_1 }}{{ pokemon.type_2 ? ' / ' + pokemon.type_2 : '' }}</td>
           <td>{{ pokemon.total }}</td>
           <td>{{ pokemon.hp }}</td>
           <td>{{ pokemon.attack }}</td>
