@@ -59,7 +59,7 @@ const closeModal = () => {
   margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 60%;
+  width: 40%;
   display: flex;
   position: relative;
 }

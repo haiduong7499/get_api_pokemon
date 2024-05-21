@@ -1,13 +1,27 @@
 <template>
   <div>
-    <select id="typeSelect" v-model="selectedType" class="custom-select" @change="handleSelectChange">
-      <option value="">Default</option>
-      <option v-for="type in typeList" :key="type.id" :value="type.id">{{ type.name }}</option>
+    <select
+      id="typeSelect"
+      v-model="selectedType"
+      class="custom-select"
+      @change="handleSelectChange"
+    >
+      <option value="">Filter Type: Default</option>
+      <option v-for="type in typeList" :key="type.id" :value="type.id">
+        {{ type.name }}
+      </option>
     </select>
     <table>
       <thead>
         <tr>
-          <th v-for="(head, index) in headers" :key="index">{{ head.name }}<img v-if="head.sortable" src="../assets/arrow-down.svg" @click="sortBy(`${head.type}`)" :class="getSortClass(`${head.type}`)"></th>
+          <th v-for="(head, index) in headers" :key="index">
+            {{ head.name }}<img
+              v-if="head.sortable"
+              src="../assets/arrow-down.svg"
+              @click="sortBy(`${head.type}`)"
+              :class="getSortClass(`${head.type}`)"
+            />
+          </th>
           <th></th>
         </tr>
       </thead>
@@ -24,7 +38,7 @@
           <td>{{ pokemon.sp_def }}</td>
           <td>{{ pokemon.speed }}</td>
           <td>
-            <button @click="showDetail(pokemon)">Detail</button>
+            <img src="../assets/ico_eye.svg" @click="showDetail(pokemon)" />
           </td>
         </tr>
       </tbody>
@@ -142,6 +156,9 @@ th {
   background-color: #f4f4f4;
   cursor: pointer;
 }
+td img {
+  cursor: pointer;
+}
 th img {
   margin-left: 5px;
   transition: 0.5s;
@@ -163,7 +180,12 @@ tr:hover {
   border-radius: 4px;
   outline: none;
 }
-
+.pagination {
+  text-align: center;
+}
+.pagination span {
+  margin: 0 10px;
+}
 .custom-select:focus {
   border-color: #007bff;
   box-shadow: 0 0 0 0.1rem rgba(0,123,255,.25);
