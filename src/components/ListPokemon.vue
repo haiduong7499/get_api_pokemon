@@ -12,10 +12,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="pokemon in listItems" :key="pokemon.id">
+        <tr v-for="pokemon in listPokemon" :key="pokemon.id">
           <td>{{ pokemon.number }}</td>
           <td>{{ pokemon.name }}</td>
-          <td>{{ pokemon.type_1 }}{{ pokemon.type_2 ? ' / ' + pokemon.type_2 : '' }}</td>
+          <td>{{ pokemon.type_name }}</td>
           <td>{{ pokemon.total }}</td>
           <td>{{ pokemon.hp }}</td>
           <td>{{ pokemon.attack }}</td>
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, ref } from 'vue';
+import { defineProps, computed, defineEmits, ref } from 'vue';
 import ModalDetail from './ModalDetail.vue';
 
 const props = defineProps({
@@ -89,6 +89,17 @@ const formatDate = (date) => {
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(date).toLocaleDateString(undefined, options);
 }
+const listPokemon = computed(() => {
+  const result = props.listItems.map((item) => {
+    const nameTypeName1 = props.typeList.find(type => type.id === item.type_1)?.name || '';
+    const nameTypeName2 = props.typeList.find(type => type.id === item.type_2)?.name || '';
+    return {
+      type_name: `${nameTypeName1} ${nameTypeName2 ? '/ ' + nameTypeName2 : ''}`,
+      ...item
+    }
+  })
+  return result
+})
 function nextPage() {
   emits('nextPage');
 }
